@@ -36,6 +36,12 @@
         marker.dragging.enable();
       }, 3000);
 
+      setTimeout(function() {
+        marker.setLatLng([93, 1]);
+        marker.openPopup();
+        marker.dragging.enable();
+      }, 7000);
+
       marker.bindPopup("<strong>Ciao!</strong>");
     </script>
   </body>

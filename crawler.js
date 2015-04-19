@@ -1,20 +1,30 @@
-var request = require('request'); //node carica una libreria esterna
+var request = require('request');
 var cheerio = require('cheerio');
+var dataUrl = "http://www.milanodabere.it/milano/teatri";
 
-var dataUrl = "http://www.milanodabere.it/milano/teatri"; //salvo all'interno della variabile una stringa che ha l'indrizzo in questione
-
-request(dataUrl, function(error, response, body) { //#1dataUrl del sito, #2 è una funzione di callback
+request(dataUrl, function(error, response, body) {
   var $ = cheerio.load(body);
-
   var elements = $('#mdb_lista > article');
   var list = [];
 
+  // "header > div.media-body > aside > div > a:nth-child(2)"
+
   elements.each(function(index, element) {
     var obj = {};
-    var addressLink = $('header > div.media-body > aside > div > a:nth-child(2)', element).attr('href');
+    var addressLink = "";
 
     obj.title = $('header h1 > a', element).text();
-    obj.coords = [];
+
+    addressLink = $('header > div.media-body > aside > div > a:nth-child(2)', element).attr('href');
+
+    var tokens = addressLink.split('?');
+
+    tokens = tokens[1].split('&');
+
+    obj.coords = [
+      parseFloat(tokens[0].split('=')[1]),
+      parseFloat(tokens[1].split('=')[1])
+    ];
 
     list.push(obj);
   });

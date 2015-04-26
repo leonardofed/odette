@@ -1,6 +1,6 @@
-var request = require('request');
-var cheerio = require('cheerio');
-var dataUrl = "http://www.milanodabere.it/milano/teatri";
+var request = require('request'); //npm install da terminale
+var cheerio = require('cheerio'); //Libreria per fare scraping; jQuery su nodeJS
+var dataUrl = "http://www.milanodabere.it/milano/teatri"; //URL di scraping
 
 request(dataUrl, function(error, response, body) {
   var $ = cheerio.load(body);
@@ -8,19 +8,15 @@ request(dataUrl, function(error, response, body) {
   var list = [];
 
   // "header > div.media-body > aside > div > a:nth-child(2)"
+  // CSS Path da inspector della pagina.
 
   elements.each(function(index, element) {
     var obj = {};
     var addressLink = "";
-
     obj.title = $('header h1 > a', element).text();
-
     addressLink = $('header > div.media-body > aside > div > a:nth-child(2)', element).attr('href');
-
     var tokens = addressLink.split('?');
-
     tokens = tokens[1].split('&');
-
     obj.coords = [
       parseFloat(tokens[0].split('=')[1]),
       parseFloat(tokens[1].split('=')[1])
